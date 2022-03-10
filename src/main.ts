@@ -15,18 +15,20 @@ const responsiveCanvas = new ResponsiveCanvas({
 const canvas = responsiveCanvas.canvas
 const context = responsiveCanvas.ctx
 
+// context.filter = 'blur(5px)'
+
 let circleMinSize = 5
 let circleMaxSize = 110
 let circlesFactor = 29
 let circlesOn = false
 
 let rayLineWidth = 1
-let rayAmount = 300
-let maxMarchIterations = 30
-let maxRayReflections = 0
+let rayAmount = 80
+let maxMarchIterations = 1
+let maxRayReflections = 10
 let rayOptions = {
     showCircles: false,
-    showRays: false,
+    showRays: true,
     showPoints: true,
     color: '#fdf3c6'
 }

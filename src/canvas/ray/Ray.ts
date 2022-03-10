@@ -13,15 +13,15 @@ interface RayOptions extends VectorOptions {
 }
 
 interface MarchOptions {
-    startingPosition?: Vector
     items: Circle[]
+    maxIterationCount: number
+    maxMarchCount: number
+    startingPosition?: Vector
     direction?: Vector
     iteration?: number
     previousClosest?: Circle
     color?: string
-    maxIterationCount: number
 }
-
 export class Ray {
     context: CanvasRenderingContext2D
     pos: Vector
@@ -46,14 +46,15 @@ export class Ray {
         items,
         direction = new DirVector({ angle: this.angle }),
         iteration = 0,
-        previousClosest,
         color = this.color,
-        maxIterationCount
+        ...options
     }: MarchOptions) {
-        const oldStrokeStyle = this.context.strokeStyle
-        const oldFillStyle = this.context.fillStyle
-
-        const significantItems = previousClosest ? items.filter((i) => i.id !== previousClosest.id) : items
+        let significantItems: Circle[]
+        if (options.previousClosest) {
+            significantItems = items.filter((i) => i.id !== options.previousClosest!.id)
+        } else {
+            significantItems = items
+        }
 
         let currentPosition = startingPosition
 
@@ -61,7 +62,7 @@ export class Ray {
         let distance = currentPosition.signedDistance(closest)
 
         let i = 0
-        while (i < 50) {
+        while (i < options.maxMarchCount) {
             if (distance < 1 || distance > window.innerWidth / 3) break
 
             if (this.showLines) {
@@ -82,8 +83,8 @@ export class Ray {
             i++
         }
 
-        const newColor = average([color || this.color, closest.color], undefined, [0.1, 0.9])
-            .alpha(0.8 - iteration * (0.8 / maxIterationCount))
+        const newColor = average([color || this.color, closest.color], undefined, [0.5, 0.5])
+            .alpha(0.8 - iteration * (0.8 / options.maxIterationCount))
             .hex()
 
         if (this.showPoints) {
@@ -92,10 +93,7 @@ export class Ray {
             this.context.fillRect(currentPosition.x - size / 2, currentPosition.y - size / 2, size, size)
         }
 
-        this.context.strokeStyle = oldStrokeStyle
-        this.context.fillStyle = oldFillStyle
-
-        if (iteration < maxIterationCount) {
+        if (iteration < options.maxIterationCount) {
             const normal = currentPosition.minus(closest.pos).normalize()
             const velocity = startingPosition.minus(currentPosition).normalize()
             const perpendicular = normal.mult(velocity.dotProduct(normal))
@@ -105,7 +103,8 @@ export class Ray {
             this.march({
                 items,
                 direction,
-                maxIterationCount,
+                maxIterationCount: options.maxIterationCount,
+                maxMarchCount: options.maxMarchCount,
                 startingPosition: currentPosition,
                 iteration: iteration + 1,
                 previousClosest: closest,

@@ -1,10 +1,7 @@
 import { Vector } from '../vector/Vector'
 
 interface ResponsiveCanvasOptions {
-    width?: number
-    height?: number
     resizing?: boolean
-    fromOffset?: boolean
     mouseMove?: boolean
 }
 
@@ -13,20 +10,18 @@ export default class ResponsiveCanvas {
     ctx: CanvasRenderingContext2D
     coordinates: Vector
 
-    scheduled: boolean
+    scheduled?: boolean
     constructor({ target, options }: { target: HTMLCanvasElement; options?: ResponsiveCanvasOptions }) {
-        this.canvas = target
-        this.coordinates = new Vector({ x: 0, y: 0 })
-        this.ctx = target.getContext('2d')!
-        this.scheduled = false
-
-        if (options?.fromOffset) {
-            this.canvas.width = target.offsetWidth
-            this.canvas.height = target.offsetHeight
-        } else {
-            this.canvas.width = options?.width || target.width
-            this.canvas.height = options?.height || target.height
+        if (!target || !ResponsiveCanvas.isCanvas(target)) {
+            throw new Error('Missing canvas element')
         }
+        this.canvas = target
+        this.ctx = target.getContext('2d')!
+
+        this.canvas.width = target.offsetWidth
+        this.canvas.height = target.offsetHeight
+
+        this.coordinates = new Vector({ x: 0, y: 0 })
 
         if (options?.mouseMove) {
             this.canvas.addEventListener('mousemove', (event) => {
@@ -65,5 +60,9 @@ export default class ResponsiveCanvas {
     resize() {
         this.canvas.width = this.canvas.offsetWidth
         this.canvas.height = this.canvas.offsetHeight
+    }
+
+    static isCanvas(el: any): el is HTMLCanvasElement {
+        return el instanceof HTMLCanvasElement
     }
 }

@@ -1,31 +1,13 @@
+import './style/global.css'
 import { Ray } from './canvas/ray/Ray'
 import ResponsiveCanvas from './canvas/ResponsiveCanvas'
 import { Circle } from './canvas/shape/Circle'
-import './style/global.css'
+import { degToRad, randomInteger } from './util'
 import { Vector } from './vector/Vector'
 
-function randomInteger(min: number, max: number) {
-    return Math.random() * (max - min) + min
-}
-
-function isCanvas(e: any): e is HTMLCanvasElement {
-    return e instanceof HTMLCanvasElement
-}
-
-function degToRad(degrees: number): number {
-    return degrees * (Math.PI / 180)
-}
-
-const canvasTarget = document.getElementById('canvas')
-
-if (!canvasTarget || !isCanvas(canvasTarget)) {
-    throw new Error('Missing canvas element')
-}
-
 const responsiveCanvas = new ResponsiveCanvas({
-    target: canvasTarget,
+    target: document.getElementById('canvas') as HTMLCanvasElement,
     options: {
-        fromOffset: true,
         mouseMove: true,
         resizing: true
     }
@@ -33,21 +15,34 @@ const responsiveCanvas = new ResponsiveCanvas({
 const canvas = responsiveCanvas.canvas
 const context = responsiveCanvas.ctx
 
-const circlesAmount = 20
-const circles: Circle[] = []
+let circleMinSize = 5
+let circleMaxSize = 110
+let circlesFactor = 29
+let circlesOn = false
 
+let rayLineWidth = 1
+let rayAmount = 300
+let maxMarchIterations = 30
+let maxRayReflections = 0
+let rayOptions = {
+    showCircles: false,
+    showRays: false,
+    showPoints: true,
+    color: '#fdf3c6'
+}
+
+const circlesAmount = Math.round(Math.sqrt(canvas.width * canvas.height) / circlesFactor)
+const circles: Circle[] = []
 for (let i = 0; i < circlesAmount; i++) {
     let x = randomInteger(0, canvas.width)
     let y = randomInteger(0, canvas.height)
-    let r = randomInteger(20, 80)
-    const circle = new Circle({ context, x, y, radius: r })
-    circles.push(circle)
+    let r = randomInteger(circleMinSize, circleMaxSize)
+    circles.push(new Circle({ context, x, y, radius: r }))
 }
 
-const rayAmount = 4
-
-function drawBg() {
-    context.fillRect(0, 0, canvas.width, canvas.height)
+let angles: number[] = []
+for (let i = 1; i <= rayAmount; i++) {
+    angles.push(degToRad((360 / rayAmount) * i))
 }
 
 function drawCircles() {
@@ -57,28 +52,30 @@ function drawCircles() {
     }
 }
 
-function drawRays({ x, y }: { x: number; y: number }) {
-    context.lineWidth = 2
-    for (let i = 1; i <= rayAmount; i++) {
-        const angle = degToRad((360 / rayAmount) * i)
+function drawBg() {
+    context.fillStyle = 'black'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+}
 
+function drawRays({ x, y }: { x: number; y: number }) {
+    context.lineWidth = rayLineWidth
+    for (const angle of angles) {
         const ray = new Ray({
+            ...rayOptions,
             context,
             x,
             y,
-            angle,
-            showCircles: false,
-            showRays: true,
-            showPoints: true,
-            color: 'white'
+            angle
         })
-        ray.march({ items: circles, maxIterationCount: 3 })
+        ray.march({ items: circles, maxIterationCount: maxRayReflections, maxMarchCount: maxMarchIterations })
     }
 }
 
 function animate({ x, y }: Vector) {
     drawBg()
-    drawCircles()
+    if (circlesOn) {
+        drawCircles()
+    }
     drawRays({ x, y })
 }
 
@@ -89,7 +86,7 @@ canvas.addEventListener('mousemove', (event) => {
             responsiveCanvas.setCoordinates(event)
             animate(responsiveCanvas.coordinates)
             scheduled = null
-        }, 17)
+        }, 1000 / 60)
     }
     scheduled = event
 })

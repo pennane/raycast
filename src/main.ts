@@ -2,7 +2,7 @@ import './style/global.css'
 import { Ray } from './canvas/ray/Ray'
 import ResponsiveCanvas from './canvas/ResponsiveCanvas'
 import { Circle } from './canvas/shape/Circle'
-import { degToRad, mulberry32, seededRandomInteger } from './util'
+import { degToRad, mulberry32, seededRandomArbitrary } from './util'
 import { Vector } from './vector/Vector'
 import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams } from './settings'
 
@@ -38,9 +38,10 @@ function start(settings: SettingsParams) {
     const circles: Circle[] = []
 
     for (let i = 0; i < circlesAmount; i++) {
-        let x = seededRandomInteger(randomGenerator, 0, canvas.width)
-        let y = seededRandomInteger(randomGenerator, 0, canvas.height)
-        let r = seededRandomInteger(randomGenerator, settings.circles.minSize, settings.circles.maxSize)
+        let x = seededRandomArbitrary(randomGenerator, 0, canvas.width)
+        let y = seededRandomArbitrary(randomGenerator, 0, canvas.height)
+        let r = seededRandomArbitrary(randomGenerator, settings.circles.minSize, settings.circles.maxSize)
+
         circles.push(
             new Circle({
                 context,

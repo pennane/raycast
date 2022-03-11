@@ -1,8 +1,8 @@
-export function randomInteger(min: number, max: number) {
+export function randomArbitrary(min: number, max: number) {
     return Math.random() * (max - min) + min
 }
 
-export function seededRandomInteger(generator: () => number, min: number, max: number) {
+export function seededRandomArbitrary(generator: () => number, min: number, max: number) {
     return generator() * (max - min) + min
 }
 

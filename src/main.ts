@@ -6,7 +6,10 @@ import { degToRad, mulberry32, seededRandomInteger } from './util'
 import { Vector } from './vector/Vector'
 import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams } from './settings'
 
-const seed = Math.random()
+let seed = Math.round(Math.random() * 10000000)
+const seedElement = document.getElementById('seed')! as HTMLInputElement
+seedElement.value = String(seed)
+document.getElementById('seed')!.addEventListener('change', (e) => (seed = parseFloat(seedElement.value)))
 
 const mainTarget = document.getElementById('canvas-target')!
 

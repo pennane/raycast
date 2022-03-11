@@ -39,7 +39,7 @@ export function defaultSettings(): SettingsParams {
             amount: 290,
             points: true,
             rays: true,
-            color: '#fdf3c6'
+            color: 'blue'
         },
         march: {
             iterations: 40,

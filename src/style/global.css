@@ -2,9 +2,6 @@
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
 }
 
 #canvas {
@@ -28,29 +25,25 @@
     color: white;
     font-size: 0.7rem;
     padding: 0.5rem;
+    padding-right: 1rem;
 }
 
-#settings ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-#settings li > div {
-    display: flex;
-    gap: 0.8rem;
+#settings > div {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 50%;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 #settings h3 {
     margin: 0;
-    text-align: left;
 }
 
 #settings input {
     height: 1rem;
-    max-width: 6rem;
 }
 
 #settings label {
-    width: 5rem;
     text-align: right;
 }

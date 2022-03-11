@@ -9,100 +9,96 @@
         <div id="app">
             <div id="canvas-target"></div>
             <div id="settings">
-                <ul>
-                    <li>
-                        <h3>General</h3>
-                        <div>
-                            <label>Only on click</label>
-                            <input type="checkbox" id="onlyOnClick" />
-                        </div>
-                        <div>
-                            <label>Seed</label>
-                            <input type="number" id="seed" />
-                        </div>
-                    </li>
-                    <li>
-                        <h3>Circles</h3>
-                        <ul>
-                            <li>
-                                <div>
-                                    <label>Minsize</label>
-                                    <input type="number" id="minSize" min="5" max="200" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>maxSize</label>
-                                    <input type="number" id="maxSize" min="6" max="201" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>amount factor</label>
-                                    <input type="number" id="amountFactor" min="5" max="100" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>visible</label>
-                                    <input type="checkbox" id="visible" />
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3>Rays</h3>
-                        <ul>
-                            <li>
-                                <div>
-                                    <label>line width</label>
-                                    <input type="number" id="lineWidth" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>amount</label>
-                                    <input type="number" id="amount" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>rays</label>
-                                    <input type="checkbox" id="rays" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>points</label>
-                                    <input type="checkbox" id="points" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>color</label>
-                                    <input type="text" id="color" />
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3>Marching</h3>
-                        <ul>
-                            <li>
-                                <div>
-                                    <label>max iterations</label>
-                                    <input type="number" id="maxIterations" min="1" max="200" />
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <label>max reflections </label>
-                                    <input type="number" id="maxReflections" min="0" max="200" />
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <div>
+                    <h3>General</h3>
+                </div>
+
+                <div>
+                    <label>Only on click</label>
+                    <input type="checkbox" id="onlyOnClick" />
+                </div>
+                <div>
+                    <label>Seed</label>
+                    <input type="number" id="seed" />
+                </div>
+
+                <div>
+                    <h3>Circles</h3>
+                </div>
+
+                <div>
+                    <label>Minsize</label>
+                    <input type="number" id="minSize" min="5" max="200" />
+                </div>
+
+                <div>
+                    <label>maxSize</label>
+                    <input type="number" id="maxSize" min="6" max="201" />
+                </div>
+
+                <div>
+                    <label>amount factor</label>
+                    <input type="number" id="amountFactor" min="5" max="100" />
+                </div>
+
+                <div>
+                    <label>visible</label>
+                    <input type="checkbox" id="visible" />
+                </div>
+
+                <div>
+                    <h3>Rays</h3>
+                </div>
+
+                <div>
+                    <label>line width</label>
+                    <input type="number" id="lineWidth" />
+                </div>
+
+                <div>
+                    <label>amount</label>
+                    <input type="number" id="amount" />
+                </div>
+
+                <div>
+                    <label>rays</label>
+                    <input type="checkbox" id="rays" />
+                </div>
+
+                <div>
+                    <label>points</label>
+                    <input type="checkbox" id="points" />
+                </div>
+
+                <div>
+                    <label>color</label>
+                    <input type="text" id="color" />
+                </div>
+
+                <div>
+                    <h3>Marching</h3>
+                </div>
+
+                <div>
+                    <label>iterations</label>
+                    <input type="number" id="iterations" min="1" max="200" />
+                </div>
+
+                <div>
+                    <label>reflections </label>
+                    <input type="number" id="reflections" min="0" max="200" />
+                </div>
+                <div>
+                    <h3>Shapes</h3>
+                </div>
+                <div>
+                    <label>color</label>
+                    <input type="text" id="shapeColor" />
+                </div>
+                <div>
+                    <label>color transmission</label>
+                    <input type="number" min="0" max="1" id="shapeColorTransmission" />
+                </div>
             </div>
         </div>
         <script type="module" src="/src/main.ts"></script>

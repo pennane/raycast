@@ -81,8 +81,13 @@ export class Ray {
             i++
         }
 
-        const newColor = average([color || this.color, closest.color], undefined, [0.5, 0.5])
-            .alpha(0.8 - iteration * (0.8 / options.maxIterationCount))
+        const tranmissionAmount = Math.max(Math.min(closest.colorTransmission, 1), 0)
+
+        const newColor = average([color || this.color, closest.color], undefined, [
+            1 - tranmissionAmount,
+            tranmissionAmount
+        ])
+            .alpha(0.9 - iteration * (0.9 / options.maxIterationCount))
             .hex()
 
         if (this.showPoints) {

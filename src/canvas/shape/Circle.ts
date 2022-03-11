@@ -7,9 +7,9 @@ interface CircleOptions extends ColoredShapeOptions {
 export class Circle extends ColoredShape {
     radius: number
 
-    constructor({ context, x, y, radius }: CircleOptions) {
-        super({ context, x, y })
-        this.radius = radius
+    constructor(options: CircleOptions) {
+        super(options)
+        this.radius = options.radius
     }
 
     show() {

@@ -41,7 +41,16 @@ function start(settings: SettingsParams) {
         let x = seededRandomInteger(randomGenerator, 0, canvas.width)
         let y = seededRandomInteger(randomGenerator, 0, canvas.height)
         let r = seededRandomInteger(randomGenerator, settings.circles.minSize, settings.circles.maxSize)
-        circles.push(new Circle({ context, x, y, radius: r }))
+        circles.push(
+            new Circle({
+                context,
+                x,
+                y,
+                radius: r,
+                color: settings.shapes.shapeColor,
+                colorTransmission: settings.shapes.shapeColorTransmission
+            })
+        )
     }
 
     let angles: number[] = []
@@ -76,8 +85,8 @@ function start(settings: SettingsParams) {
 
             ray.march({
                 items: circles,
-                maxIterationCount: settings.march.maxReflections,
-                maxMarchCount: settings.march.maxIterations
+                maxIterationCount: settings.march.reflections,
+                maxMarchCount: settings.march.iterations
             })
         }
     }

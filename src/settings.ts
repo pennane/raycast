@@ -16,8 +16,12 @@ export interface SettingsParams {
         color: string
     }
     march: {
-        maxIterations: number
-        maxReflections: number
+        iterations: number
+        reflections: number
+    }
+    shapes: {
+        shapeColor: 'random' | string
+        shapeColorTransmission: number
     }
 }
 
@@ -32,14 +36,18 @@ export function defaultSettings(): SettingsParams {
         },
         rays: {
             lineWidth: 1,
-            amount: 300,
+            amount: 250,
             points: true,
             rays: true,
             color: '#fdf3c6'
         },
         march: {
-            maxIterations: 40,
-            maxReflections: 0
+            iterations: 40,
+            reflections: 0
+        },
+        shapes: {
+            shapeColor: 'random',
+            shapeColorTransmission: 0.5
         }
     }
 }

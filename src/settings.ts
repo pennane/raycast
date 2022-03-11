@@ -85,6 +85,8 @@ export function loadSettingsFromDom(): SettingsParams {
                 const input = document.getElementById(innerKey) as HTMLInputElement
                 if (input.type === 'checkbox') {
                     settings[key][innerKey] = input.checked
+                } else if (input.type === 'number') {
+                    settings[key][innerKey] = Number(input.value)
                 } else {
                     settings[key][innerKey] = input.value
                 }
@@ -93,6 +95,8 @@ export function loadSettingsFromDom(): SettingsParams {
             const input = document.getElementById(key) as HTMLInputElement
             if (input.type === 'checkbox') {
                 settings[key] = input.checked
+            } else if (input.type === 'number') {
+                settings[key] = Number(input.value)
             } else {
                 settings[key] = input.value
             }

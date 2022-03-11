@@ -29,14 +29,14 @@ export function defaultSettings(): SettingsParams {
     return {
         onlyOnClick: false,
         circles: {
-            minSize: 5,
-            maxSize: 110,
-            amountFactor: 29,
-            visible: true
+            minSize: 20,
+            maxSize: 80,
+            amountFactor: 23,
+            visible: false
         },
         rays: {
             lineWidth: 1,
-            amount: 250,
+            amount: 290,
             points: true,
             rays: true,
             color: '#fdf3c6'
@@ -47,7 +47,7 @@ export function defaultSettings(): SettingsParams {
         },
         shapes: {
             shapeColor: 'random',
-            shapeColorTransmission: 0.5
+            shapeColorTransmission: 0.65
         }
     }
 }

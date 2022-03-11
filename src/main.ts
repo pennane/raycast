@@ -9,7 +9,7 @@ import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams } from '.
 let seed = Math.round(Math.random() * 10000000)
 const seedElement = document.getElementById('seed')! as HTMLInputElement
 seedElement.value = String(seed)
-document.getElementById('seed')!.addEventListener('change', (e) => (seed = parseFloat(seedElement.value)))
+document.getElementById('seed')!.addEventListener('change', () => (seed = parseFloat(seedElement.value)))
 
 const mainTarget = document.getElementById('canvas-target')!
 

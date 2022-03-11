@@ -104,3 +104,13 @@ export function loadSettingsFromDom(): SettingsParams {
     }
     return settings
 }
+
+export function useToggler() {
+    const toggler = document.getElementById('toggler')!
+    const settings = document.getElementById('settings')!
+    toggler.addEventListener('click', () => {
+        console.log(1)
+
+        settings.classList.toggle('closed')
+    })
+}

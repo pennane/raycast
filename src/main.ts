@@ -4,7 +4,7 @@ import ResponsiveCanvas from './canvas/ResponsiveCanvas'
 import { Circle } from './canvas/shape/Circle'
 import { degToRad, mulberry32, seededRandomArbitrary } from './util'
 import { Vector } from './vector/Vector'
-import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams } from './settings'
+import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams, useToggler } from './settings'
 
 let seed = Math.round(Math.random() * 10000000)
 const seedElement = document.getElementById('seed')! as HTMLInputElement
@@ -135,3 +135,4 @@ window.addEventListener('resize', () => {
 })
 
 start(loadSettingsFromDom())
+useToggler()

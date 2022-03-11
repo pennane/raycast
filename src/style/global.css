@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -26,6 +30,13 @@
     font-size: 0.7rem;
     padding: 0.5rem;
     padding-right: 1rem;
+    padding-top: 3rem;
+
+    transform-origin: right;
+    transition: all 0.5s;
+
+    width: 220px;
+    height: 420px;
 }
 
 #settings > div {
@@ -46,4 +57,34 @@
 
 #settings label {
     text-align: right;
+}
+
+#toggler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0.5rem;
+    box-sizing: border-box;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    color: #0275ff;
+    border: 1px solid #0275ff;
+    border-radius: 0.3rem;
+}
+
+#settings.closed {
+    width: 3rem;
+    overflow: hidden;
+}
+
+#settings.closed div {
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+}
+#settings.closed #toggler {
+    transform: rotate(180deg);
 }

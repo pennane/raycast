@@ -2,96 +2,123 @@ import './style/global.css'
 import { Ray } from './canvas/ray/Ray'
 import ResponsiveCanvas from './canvas/ResponsiveCanvas'
 import { Circle } from './canvas/shape/Circle'
-import { degToRad, randomInteger } from './util'
+import { degToRad, mulberry32, seededRandomInteger } from './util'
 import { Vector } from './vector/Vector'
+import { loadDefaultSettingsToDom, loadSettingsFromDom, SettingsParams } from './settings'
 
-const responsiveCanvas = new ResponsiveCanvas({
-    target: document.getElementById('canvas') as HTMLCanvasElement,
-    options: {
-        mouseMove: true,
-        resizing: true
+const seed = Math.random()
+
+const mainTarget = document.getElementById('canvas-target')!
+
+function start(settings: SettingsParams) {
+    const randomGenerator = mulberry32(seed)
+    while (mainTarget?.firstChild) {
+        mainTarget.removeChild(mainTarget.firstChild)
     }
-})
-const canvas = responsiveCanvas.canvas
-const context = responsiveCanvas.ctx
 
-// context.filter = 'blur(5px)'
+    const c = document.createElement('canvas')
+    c.id = 'canvas'
+    mainTarget.appendChild(c)
+    const responsiveCanvas = new ResponsiveCanvas({
+        target: c as HTMLCanvasElement,
+        options: {
+            mouseMove: true,
+            resizing: true
+        }
+    })
 
-let circleMinSize = 5
-let circleMaxSize = 110
-let circlesFactor = 29
-let circlesOn = false
+    const canvas = responsiveCanvas.canvas
+    const context = responsiveCanvas.ctx
 
-let rayLineWidth = 1
-let rayAmount = 80
-let maxMarchIterations = 1
-let maxRayReflections = 10
-let rayOptions = {
-    showCircles: false,
-    showRays: true,
-    showPoints: true,
-    color: '#fdf3c6'
-}
+    const circlesAmount = Math.round(Math.sqrt(canvas.width * canvas.height) / settings.circles.amountFactor)
 
-const circlesAmount = Math.round(Math.sqrt(canvas.width * canvas.height) / circlesFactor)
-const circles: Circle[] = []
-for (let i = 0; i < circlesAmount; i++) {
-    let x = randomInteger(0, canvas.width)
-    let y = randomInteger(0, canvas.height)
-    let r = randomInteger(circleMinSize, circleMaxSize)
-    circles.push(new Circle({ context, x, y, radius: r }))
-}
+    const circles: Circle[] = []
 
-let angles: number[] = []
-for (let i = 1; i <= rayAmount; i++) {
-    angles.push(degToRad((360 / rayAmount) * i))
-}
-
-function drawCircles() {
-    context.lineWidth = 1
-    for (const circle of circles) {
-        circle.show()
+    for (let i = 0; i < circlesAmount; i++) {
+        let x = seededRandomInteger(randomGenerator, 0, canvas.width)
+        let y = seededRandomInteger(randomGenerator, 0, canvas.height)
+        let r = seededRandomInteger(randomGenerator, settings.circles.minSize, settings.circles.maxSize)
+        circles.push(new Circle({ context, x, y, radius: r }))
     }
-}
 
-function drawBg() {
-    context.fillStyle = 'black'
-    context.fillRect(0, 0, canvas.width, canvas.height)
-}
-
-function drawRays({ x, y }: { x: number; y: number }) {
-    context.lineWidth = rayLineWidth
-    for (const angle of angles) {
-        const ray = new Ray({
-            ...rayOptions,
-            context,
-            x,
-            y,
-            angle
-        })
-        ray.march({ items: circles, maxIterationCount: maxRayReflections, maxMarchCount: maxMarchIterations })
+    let angles: number[] = []
+    for (let i = 1; i <= settings.rays.amount; i++) {
+        angles.push(degToRad((360 / settings.rays.amount) * i))
     }
-}
 
-function animate({ x, y }: Vector) {
+    function drawCircles() {
+        context.lineWidth = 1
+        for (const circle of circles) {
+            circle.show()
+        }
+    }
+
+    function drawBg() {
+        context.fillStyle = 'black'
+        context.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    function drawRays({ x, y }: { x: number; y: number }) {
+        context.lineWidth = settings.rays.lineWidth
+        for (const angle of angles) {
+            const ray = new Ray({
+                color: settings.rays.color,
+                showPoints: settings.rays.points,
+                showRays: settings.rays.rays,
+                context,
+                x,
+                y,
+                angle
+            })
+
+            ray.march({
+                items: circles,
+                maxIterationCount: settings.march.maxReflections,
+                maxMarchCount: settings.march.maxIterations
+            })
+        }
+    }
+
+    function animate({ x, y }: Vector) {
+        drawBg()
+        if (settings.circles.visible) {
+            drawCircles()
+        }
+        drawRays({ x, y })
+    }
+
+    let scheduled: MouseEvent | null = null
+    canvas.addEventListener(settings.onlyOnClick ? 'click' : 'mousemove', (event) => {
+        if (!scheduled) {
+            setTimeout(() => {
+                responsiveCanvas.setCoordinates(event)
+                animate(responsiveCanvas.coordinates)
+                scheduled = null
+            }, 1000 / 60)
+        }
+        scheduled = event
+    })
+
     drawBg()
-    if (circlesOn) {
+    if (settings.circles.visible) {
         drawCircles()
     }
-    drawRays({ x, y })
 }
 
-let scheduled: MouseEvent | null = null
-canvas.addEventListener('mousemove', (event) => {
-    if (!scheduled) {
-        setTimeout(() => {
-            responsiveCanvas.setCoordinates(event)
-            animate(responsiveCanvas.coordinates)
-            scheduled = null
-        }, 1000 / 60)
-    }
-    scheduled = event
+loadDefaultSettingsToDom()
+
+for (const e of Array.from(document.querySelectorAll('input'))) {
+    e.addEventListener('change', () => {
+        start(loadSettingsFromDom())
+    })
+}
+
+let resizeTimeout: number
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout)
+    resizeTimeout = setTimeout(() => {
+        start(loadSettingsFromDom())
+    }, 100)
 })
 
-drawBg()
-drawCircles()
+start(loadSettingsFromDom())

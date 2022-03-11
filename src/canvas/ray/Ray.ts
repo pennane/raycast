@@ -26,7 +26,6 @@ export class Ray {
     context: CanvasRenderingContext2D
     pos: Vector
     angle: number
-    showCircles: boolean
     showLines: boolean
     showPoints: boolean
     color: string
@@ -35,7 +34,6 @@ export class Ray {
         this.pos = new Vector({ x, y })
         this.angle = angle
         this.context = context
-        this.showCircles = !!options.showCircles
         this.showLines = !!options.showRays
         this.showPoints = !!options.showPoints
         this.color = options.color

@@ -18,3 +18,39 @@
     top: 0;
     left: 0;
 }
+
+#settings {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    width: min-content;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+}
+
+#settings ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#settings li > div {
+    display: flex;
+    gap: 0.8rem;
+}
+
+#settings h3 {
+    margin: 0;
+    text-align: left;
+}
+
+#settings input {
+    height: 1rem;
+    max-width: 6rem;
+}
+
+#settings label {
+    width: 5rem;
+    text-align: right;
+}
